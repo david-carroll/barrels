@@ -166,7 +166,12 @@ Barrels.prototype.populate = function(collections, done, autoAssociations) {
               } else if (associatedModelName) {
                 if (!that.idMap[associatedModelName])
                   return nextItem(new Error('Please provide a loading order acceptable for required associations'));
-                item[alias] = that.idMap[associatedModelName][item[alias] - 1];
+
+                //Replace item[alias] value with associated model key only if associated model uses a numeric key.
+                if(/^\d+$/.test(item[alias])){
+                  item[alias] = that.idMap[associatedModelName][item[alias] - 1];
+                }
+
               }
             } else if (autoAssociations) {
               // The order is not important, so we can strip
